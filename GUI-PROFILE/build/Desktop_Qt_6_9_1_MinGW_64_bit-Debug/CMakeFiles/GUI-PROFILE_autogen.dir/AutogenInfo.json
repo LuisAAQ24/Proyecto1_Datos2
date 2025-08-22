@@ -1,19 +1,19 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen",
-	"CMAKE_BINARY_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
-	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
-	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE",
+	"BUILD_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE",
 	"CMAKE_EXECUTABLE" : "C:/Qt/Tools/CMake_64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"C:/Users/cesar/Documents/GUI-PROFILE/CMakeLists.txt",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/CMakeLists.txt",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineSystem.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystem.cmake.in",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeNinjaFindMake.cmake",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-Initialize.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCXXCompiler.cmake",
@@ -66,7 +66,7 @@
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindBinUtils.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-FindBinUtils.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompiler.cmake.in",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake",
@@ -81,7 +81,7 @@
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineRCCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCCompiler.cmake.in",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCInformation.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-windres.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeTestRCCompiler.cmake",
@@ -98,7 +98,7 @@
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCompilerSupport.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/FeatureTesting.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompiler.cmake.in",
-		"C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
+		"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX-ABI.cmake",
 		"C:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6ConfigVersion.cmake",
 		"C:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6ConfigVersionImpl.cmake",
@@ -407,22 +407,22 @@
 		"C:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6Dependencies.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake"
 	],
-	"CMAKE_SOURCE_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE",
+	"CMAKE_SOURCE_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/deps",
+	"DEP_FILE" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "GUI-PROFILE_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/cesar/Documents/GUI-PROFILE/mainwindow.h",
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/include",
-	"MOC_COMPILATION_FILE" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/include",
+	"MOC_COMPILATION_FILE" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
@@ -478,21 +478,29 @@
 		"-c",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 6,
-	"PARSE_CACHE_FILE" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/GUI-PROFILE_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/GUI-PROFILE_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "C:/Qt/6.9.1/mingw_64/bin/moc.exe",
 	"QT_UIC_EXECUTABLE" : "C:/Qt/6.9.1/mingw_64/bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 9,
-	"SETTINGS_FILE" : "C:/Users/cesar/Documents/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/GUI-PROFILE_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/GUI-PROFILE_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
-		[ "C:/Users/cesar/Documents/GUI-PROFILE/main.cpp", "MU", null ],
-		[ "C:/Users/cesar/Documents/GUI-PROFILE/mainwindow.cpp", "MU", null ]
+		[
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/main.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/mainwindow.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],
