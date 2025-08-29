@@ -14,18 +14,54 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>270</y>
-      <width>75</width>
-      <height>20</height>
+      <x>0</x>
+      <y>0</y>
+      <width>781</width>
+      <height>571</height>
      </rect>
     </property>
-    <property name="text">
-     <string>CheckBox</string>
+    <property name="currentIndex">
+     <number>1</number>
     </property>
+    <widget class="QWidget" name="tabWidgetPage1" native="true">
+     <attribute name="title">
+      <string>Hola</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>160</y>
+        <width>75</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CheckBox</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabWidgetPage2" native="true">
+     <attribute name="title">
+      <string/>
+     </attribute>
+     <widget class="QCommandLinkButton" name="commandLinkButton">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>210</y>
+        <width>185</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CommandLinkButton</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

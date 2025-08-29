@@ -29,7 +29,7 @@ public:
         Guardado* anterior = nullptr;
         Guardado* actual = inicio;
         while (actual) {
-            if (actual->direccion == direccion) {
+            if (actual->direccion == direccion) { //actual->siguiente es lo mismo a (*actual).direccion
                 if (anterior) anterior->siguiente = actual->siguiente;
                 else inicio = actual->siguiente;
                 delete actual;
