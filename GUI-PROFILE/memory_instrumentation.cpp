@@ -1,51 +1,49 @@
+#include "ListaGuardado.h"
 #include <iostream>
 #include <cstdlib>
-#include <new>
 
-// Sobrecarga de new
-void* operator new(std::size_t size) {
-    void* ptr = std::malloc(size);
-    if (!ptr) throw std::bad_alloc();
-    std::cout << "[new] Asignados " << size << " bytes en " << ptr << std::endl;
-    return ptr;
+// Definición de la lista global
+ListaGuardado listaGlobal;
+
+// Flag para activar profiler solo después de inicializar Qt
+bool profilerActivo = false;
+
+// Sobrecarga de new/delete
+void* operator new(std::size_t tamano) {
+    void* direccion = std::malloc(tamano);
+    if (!direccion) throw std::bad_alloc();
+    if (profilerActivo)
+        listaGlobal.agregar(direccion, tamano, "desconocido");
+    return direccion;
 }
 
-// Sobrecarga de delete
-void operator delete(void* ptr) noexcept {
-    std::cout << "[delete] Liberando memoria en " << ptr << std::endl;
-    std::free(ptr);
+void operator delete(void* direccion) noexcept {
+    if (profilerActivo)
+        listaGlobal.eliminar(direccion);
+    std::free(direccion);
 }
 
-// Sobrecarga de new[] (arreglos)
-void* operator new[](std::size_t size) {
-    void* ptr = std::malloc(size);
-    if (!ptr) throw std::bad_alloc();
-    std::cout << "[new[]] Asignados " << size << " bytes en " << ptr << std::endl;
-    return ptr;
+void* operator new[](std::size_t tamano) {
+    void* direccion = std::malloc(tamano);
+    if (!direccion) throw std::bad_alloc();
+    if (profilerActivo)
+        listaGlobal.agregar(direccion, tamano, "arreglo");
+    return direccion;
 }
 
-// Sobrecarga de delete[] (arreglos)
-void operator delete[](void* ptr) noexcept {
-    std::cout << "[delete[]] Liberando memoria en " << ptr << std::endl;
-    std::free(ptr);
+void operator delete[](void* direccion) noexcept {
+    if (profilerActivo)
+        listaGlobal.eliminar(direccion);
+    std::free(direccion);
 }
 
-// Función main para probar
-int main() {
-    int* a = new int;
-    delete a;
-
-    int* arr = new int[5];
-    delete[] arr;
-
-    double* d = new double[3];
-    delete[] d;
-
-    char* c = new char;
-    delete c;
-
-    return 0;
+// Reporte automático de fugas
+void reporteAlSalir() {
+    listaGlobal.reportarFugas();
 }
+
+
+
 
 
 

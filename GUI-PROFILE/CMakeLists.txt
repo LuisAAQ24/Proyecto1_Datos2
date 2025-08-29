@@ -13,10 +13,18 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
+    # Forms
+        mainwindow.ui
+
+        # Header Files
+        ListaGuardado.h
+        mainwindow.h
+        memory_instrumentation.h
+
+        # Source Files
         main.cpp
         mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+        memory_instrumentation.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -24,6 +32,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         memory_instrumentation.h memory_instrumentation.cpp
+
+
+        ListaGuardado.h
+
+        #ListaGuardado.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GUI-PROFILE APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

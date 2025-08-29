@@ -345,6 +345,12 @@
 	"HEADERS" : 
 	[
 		[
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/ListaGuardado.h",
+			"MU",
+			"EWIEGA46WW/moc_ListaGuardado.cpp",
+			null
+		],
+		[
 			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
