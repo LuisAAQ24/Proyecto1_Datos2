@@ -32,7 +32,7 @@ public:
     void agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo);
     void eliminar(void* direccion);
     std::vector<Fuga> reportLeaks();
-    void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "C:/Users/cesar/Documents/Proyecto1_Datos2/memory_report.json");
+    void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "memory_report.json");
     void limpiar();
 
     // Getter para inicio (opcional)

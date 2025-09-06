@@ -1,4 +1,11 @@
 {
   "fugas": [
+    {
+      "direccion": "0x165b9024de0",
+      "tamano": 4,
+      "tipo": "desconocido",
+      "archivo": "memory_instrumentation.cpp",
+      "marcaDeTiempo": 1757143427
+    }
   ]
 }

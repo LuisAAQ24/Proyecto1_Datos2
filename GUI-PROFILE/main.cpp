@@ -15,12 +15,7 @@ void pruebasMemoria() {
     // ---------------------------
     // Asignaciones de prueba
     // ---------------------------
-    int* a = new int(10); delete a;
-    int* arr = new int[5]; delete[] arr;
-    double* d = new double[3];      // fuga intencional
-    char* c = new char('X'); delete c;
-    float* f = new float[10];       // fuga intencional
-
+    int* a = new int(10);
     // ---------------------------
     // Guardar JSON y reporte
     // ---------------------------

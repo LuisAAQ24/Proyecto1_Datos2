@@ -2,21 +2,23 @@
 #include <cstdlib>
 #include <new>
 
-ListaGuardado listaGlobal; // ÚNICA definición global
+
 
 void ListaGuardado::agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo) {
+    // Usamos new para que los std::string se construyan correctamente
     Guardado* nodo = static_cast<Guardado*>(std::malloc(sizeof(Guardado)));
     if (!nodo) throw std::bad_alloc();
 
+    // Construir manualmente los std::string usando placement new
+    new (&nodo->tipo) std::string(tipo);
+    new (&nodo->archivo) std::string(archivo);
     nodo->direccion = direccion;
     nodo->tamano = tamano;
-    nodo->tipo = tipo;
-    nodo->archivo = archivo;
     nodo->marcaDeTiempo = std::time(nullptr);
     nodo->siguiente = inicio;
-
     inicio = nodo;
 }
+
 
 void ListaGuardado::eliminar(void* direccion) {
     Guardado* anterior = nullptr;
