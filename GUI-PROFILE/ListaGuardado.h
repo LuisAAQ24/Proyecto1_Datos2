@@ -3,63 +3,49 @@
 
 #include <ctime>
 #include <string>
+#include <vector>
 #include <iostream>
+#include <fstream>
 
-// Nodo de la lista
 struct Guardado {
     void* direccion;
     size_t tamano;
     std::string tipo;
+    std::string archivo;
     time_t marcaDeTiempo;
     Guardado* siguiente;
 };
 
-// Lista de asignaciones
+struct Fuga {
+    void* direccion;
+    size_t tamano;
+    std::string tipo;
+    std::string archivo;
+    time_t marcaDeTiempo;
+};
+
 class ListaGuardado {
 private:
     Guardado* inicio = nullptr;
 
 public:
-    void agregar(void* direccion, size_t tamano, const std::string& tipo) {
-        Guardado* nodo = new Guardado{direccion, tamano, tipo, std::time(nullptr), inicio};
-        inicio = nodo;
-    }
+    void agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo);
+    void eliminar(void* direccion);
+    std::vector<Fuga> reportLeaks();
+    void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "C:/Users/cesar/Documents/Proyecto1_Datos2/memory_report.json");
+    void limpiar();
 
-    void eliminar(void* direccion) {
-        Guardado* anterior = nullptr;
-        Guardado* actual = inicio;
-        while (actual) {
-            if (actual->direccion == direccion) { //actual->siguiente es lo mismo a (*actual).direccion
-                if (anterior) anterior->siguiente = actual->siguiente;
-                else inicio = actual->siguiente;
-                delete actual;
-                return;
-            }
-            anterior = actual;
-            actual = actual->siguiente;
-        }
-    }
-
-    void reportarFugas() {
-        Guardado* actual = inicio;
-        std::cout << "\n===== REPORTE DE FUGAS =====\n";
-        if (!actual) {
-            std::cout << "No se detectaron fugas de memoria ✅\n";
-            return;
-        }
-        while (actual) {
-            std::cout << "Fuga en direccion " << actual->direccion
-                      << " | " << actual->tamano << " bytes"
-                      << " | Tiempo: " << actual->marcaDeTiempo << std::endl;
-            actual = actual->siguiente;
-        }
-    }
+    // Getter para inicio (opcional)
+    Guardado* getInicio() { return inicio; }
 };
 
-// Lista global
+// Declaración global
 extern ListaGuardado listaGlobal;
 
 #endif
+
+
+
 
 
 
