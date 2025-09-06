@@ -3,26 +3,53 @@
 #include "mainwindow.h"
 #include "ListaGuardado.h"
 #include "memory_instrumentation.h"
+#include <string>
+
+struct Dummy {
+    std::string texto;
+    Dummy(const std::string& t) : texto(t) {
+        std::cout << "Dummy creado: " << texto << "\n";
+    }
+    ~Dummy() {
+        std::cout << "Dummy destruido: " << texto << "\n";
+    }
+};
 
 // Función que hace pruebas de memoria y genera reporte
 void pruebasMemoria() {
-    // Limpiar memoria vieja
     listaGlobal.limpiar();
-
-    // Activar profiler solo para tus pruebas
     profilerActivo = true;
 
     // ---------------------------
-    // Asignaciones de prueba
+    // Asignaciones correctas
     // ---------------------------
-    int* a = new int(10);
+    int* a = new int(42);
+    double* b = new double(3.14159);
+    Dummy* d1 = new Dummy("objeto 1");
+
+    int* arr = new int[100];      // array simple
+    Dummy* arrObj = new Dummy[3] {{"uno"}, {"dos"}, {"tres"}};
+
+    // Liberar correctamente
+    delete a;
+    delete b;
+    delete d1;
+    delete[] arr;
+    delete[] arrObj;
+
+    // ---------------------------
+    // Fugas intencionales
+    // ---------------------------
+    new int(99);                          // fuga simple
+    new double[50];                       // fuga array
+    new Dummy("fuga objeto");             // fuga objeto
+
     // ---------------------------
     // Guardar JSON y reporte
     // ---------------------------
     guardarReporteJSON();
     reporteAlSalir();
 
-    // Desactivar profiler después de pruebas
     profilerActivo = false;
 }
 
@@ -32,12 +59,11 @@ int main(int argc, char *argv[])
     MainWindow window;
     window.show();
 
-    // Esperar 1 segundo antes de ejecutar pruebas de memoria
     QTimer::singleShot(1000, pruebasMemoria);
 
-    // Mantener la ventana abierta
     return app.exec();
 }
+
 
 
 

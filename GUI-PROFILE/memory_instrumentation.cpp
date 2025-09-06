@@ -16,40 +16,59 @@ static std::string nombreArchivo(const char* rutaCompleta) {
     return ruta;
 }
 
-// Sobrecarga de new/delete
+#include "ListaGuardado.h"
+#include <cstdlib>
+#include <new>
+#include <iostream>
+
+// Variables globales de control
+extern bool profilerActivo; // ya la tienes en memory_instrumentation.h
+
+// --------------------------
+// operator new
+// --------------------------
 void* operator new(std::size_t tamano) {
-    void* direccion = std::malloc(tamano);
-    if (!direccion) throw std::bad_alloc();
+    void* ptr = std::malloc(tamano);
+    if (!ptr) throw std::bad_alloc();
+    if (profilerActivo) {
+        std::cout << "[NEW] ptr=" << ptr << " size=" << tamano << "\n";
+        listaGlobal.agregar(ptr, tamano, "new", "");
+    }
+    return ptr;
+}
+void operator delete(void* direccion, std::size_t) noexcept {
+    if (profilerActivo && direccion) {
+        std::cout << "[DELETE sized] ptr=" << direccion << "\n";
+        listaGlobal.eliminar(direccion);
+    }
+    std::free(direccion);
+}
+
+
+
+// --------------------------
+// operator new[] (arrays)
+// --------------------------
+void* operator new[](std::size_t tamano) {
+    void* ptr = std::malloc(tamano);
+    if (!ptr) throw std::bad_alloc();
 
     if (profilerActivo) {
-        try {
-            listaGlobal.agregar(direccion, tamano, "desconocido", nombreArchivo(__FILE__));
-        } catch (...) {
-            std::cerr << "⚠️ Error al agregar nodo en ListaGuardado\n";
-        }
+        listaGlobal.agregar(ptr, tamano, "new[]", "");
     }
-
-    return direccion;
+    return ptr;
 }
-void operator delete(void* direccion) noexcept {
-    if (profilerActivo)
+
+
+void operator delete[](void* direccion, std::size_t) noexcept {
+    if (profilerActivo && direccion) {
+        std::cout << "[DELETE[] sized] ptr=" << direccion << "\n";
         listaGlobal.eliminar(direccion);
+    }
     std::free(direccion);
 }
 
-void* operator new[](std::size_t tamano) {
-    void* direccion = std::malloc(tamano);
-    if (!direccion) throw std::bad_alloc();
-    if (profilerActivo)
-        listaGlobal.agregar(direccion, tamano, "arreglo", nombreArchivo(__FILE__));
-    return direccion;
-}
 
-void operator delete[](void* direccion) noexcept {
-    if (profilerActivo)
-        listaGlobal.eliminar(direccion);
-    std::free(direccion);
-}
 
 
 // =====================

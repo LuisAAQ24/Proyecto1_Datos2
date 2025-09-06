@@ -1,11 +1,25 @@
 {
   "fugas": [
     {
-      "direccion": "0x165b9024de0",
+      "direccion": "0x275661078f0",
+      "tamano": 32,
+      "tipo": "new",
+      "archivo": "",
+      "marcaDeTiempo": 1757146844
+    },
+    {
+      "direccion": "0x275661159c0",
       "tamano": 4,
-      "tipo": "desconocido",
-      "archivo": "memory_instrumentation.cpp",
-      "marcaDeTiempo": 1757143427
+      "tipo": "new",
+      "archivo": "",
+      "marcaDeTiempo": 1757146844
+    },
+    {
+      "direccion": "0x27566141ac0",
+      "tamano": 400,
+      "tipo": "new[]",
+      "archivo": "",
+      "marcaDeTiempo": 1757146844
     }
   ]
 }

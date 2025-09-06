@@ -5,11 +5,15 @@
 
 
 void ListaGuardado::agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo) {
-    // Usamos new para que los std::string se construyan correctamente
+    // No agregar si ya existe
+    Guardado* actual = inicio;
+    while (actual) {
+        if (actual->direccion == direccion) return; // ya registrado
+        actual = actual->siguiente;
+    }
+
     Guardado* nodo = static_cast<Guardado*>(std::malloc(sizeof(Guardado)));
     if (!nodo) throw std::bad_alloc();
-
-    // Construir manualmente los std::string usando placement new
     new (&nodo->tipo) std::string(tipo);
     new (&nodo->archivo) std::string(archivo);
     nodo->direccion = direccion;
@@ -20,6 +24,7 @@ void ListaGuardado::agregar(void* direccion, size_t tamano, const std::string& t
 }
 
 
+
 void ListaGuardado::eliminar(void* direccion) {
     Guardado* anterior = nullptr;
     Guardado* actual = inicio;
@@ -27,6 +32,11 @@ void ListaGuardado::eliminar(void* direccion) {
         if (actual->direccion == direccion) {
             if (anterior) anterior->siguiente = actual->siguiente;
             else inicio = actual->siguiente;
+
+            // ✅ destruir strings antes de liberar memoria cruda
+            actual->tipo.~basic_string();
+            actual->archivo.~basic_string();
+
             std::free(actual);
             return;
         }
@@ -39,11 +49,17 @@ void ListaGuardado::limpiar() {
     Guardado* actual = inicio;
     while (actual) {
         Guardado* siguiente = actual->siguiente;
+
+        // ✅ destruir strings
+        actual->tipo.~basic_string();
+        actual->archivo.~basic_string();
+
         std::free(actual);
         actual = siguiente;
     }
     inicio = nullptr;
 }
+
 
 std::vector<Fuga> ListaGuardado::reportLeaks() {
     std::vector<Fuga> fugas;
