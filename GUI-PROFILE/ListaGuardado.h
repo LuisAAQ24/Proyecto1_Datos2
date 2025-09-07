@@ -1,9 +1,6 @@
 #ifndef LISTA_GUARDADO_H
 #define LISTA_GUARDADO_H
 
-// Implementación ligera y sin asignaciones con new/delete para evitar reentrancia.
-// Usa malloc/free internamente y un spinlock sencillo.
-
 #include <cstddef>
 #include <cstdint>
 #include <ctime>
@@ -11,95 +8,96 @@
 #include <atomic>
 #include <iostream>
 
+// Lista sin usar new/delete (evita reentrancia). Usa malloc/free y spinlock.
 struct Guardado {
     void* direccion;
     std::size_t tamano;
-    char tipo[32];          // tipo comprimido (sin std::string)
+    char tipo[16];       // "new" / "new[]"
+    char archivo[128];
+    int  linea;
     std::time_t marcaDeTiempo;
     Guardado* siguiente;
 };
 
 class ListaGuardado {
 public:
-    ListaGuardado() : cabeza(nullptr), conteo(0), bytes_totales(0) {
-        flag.clear();
-    }
+    ListaGuardado() : cabeza(nullptr), conteo(0), bytes_totales(0) { flag.clear(); }
 
-    // Agrega un registro (NO usa new, solo malloc)
-    void agregar(void* direccion, std::size_t tamano, const char* tipo) {
-        if (!direccion) return;
-        Guardado* nodo = static_cast<Guardado*>(std::malloc(sizeof(Guardado)));
-        if (!nodo) return; // sin memoria, omitimos
-        nodo->direccion = direccion;
-        nodo->tamano = tamano;
-        std::time(&nodo->marcaDeTiempo);
-        std::memset(nodo->tipo, 0, sizeof(nodo->tipo));
-        if (tipo) {
-            std::strncpy(nodo->tipo, tipo, sizeof(nodo->tipo) - 1);
-        } else {
-            std::strncpy(nodo->tipo, "desconocido", sizeof(nodo->tipo) - 1);
-        }
+    // === FIRMA NUEVA: 5 argumentos (ptr, bytes, tipo, archivo, linea)
+    void agregar(void* ptr, std::size_t bytes, const char* tipo, const char* archivo, int linea) {
+        if (!ptr) return;
+        Guardado* n = static_cast<Guardado*>(std::malloc(sizeof(Guardado)));
+        if (!n) return;
+        n->direccion = ptr;
+        n->tamano = bytes;
+        std::memset(n->tipo, 0, sizeof(n->tipo));
+        std::memset(n->archivo, 0, sizeof(n->archivo));
+        if (tipo)    std::strncpy(n->tipo,    tipo,    sizeof(n->tipo)    - 1);
+        if (archivo) std::strncpy(n->archivo, archivo, sizeof(n->archivo) - 1);
+        n->linea = linea;
+        std::time(&n->marcaDeTiempo);
 
         lock();
-        nodo->siguiente = cabeza;
-        cabeza = nodo;
+        n->siguiente = cabeza;
+        cabeza = n;
         ++conteo;
-        bytes_totales += static_cast<long long>(tamano);
+        bytes_totales += (long long)bytes;
         unlock();
     }
 
-    // Elimina el registro de 'direccion' (si existe) y devuelve el tamaño asociado.
-    std::size_t eliminar_y_tamano(void* direccion) {
-        if (!direccion) return 0;
+    // === FIRMA NUEVA: devuelve tamaño y opcionalmente archivo/linea
+    std::size_t eliminar_y_tamano(void* ptr, const char** archivoOut = nullptr, int* lineaOut = nullptr) {
+        if (!ptr) return 0;
         lock();
         Guardado* prev = nullptr;
-        Guardado* cur = cabeza;
+        Guardado* cur  = cabeza;
         while (cur) {
-            if (cur->direccion == direccion) {
-                // quitar
+            if (cur->direccion == ptr) {
                 if (prev) prev->siguiente = cur->siguiente;
                 else      cabeza = cur->siguiente;
-                std::size_t tam = cur->tamano;
+
+                std::size_t sz = cur->tamano;
+                if (archivoOut) *archivoOut = cur->archivo;
+                if (lineaOut)   *lineaOut   = cur->linea;
+
                 --conteo;
-                bytes_totales -= static_cast<long long>(tam);
+                bytes_totales -= (long long)sz;
                 unlock();
                 std::free(cur);
-                return tam;
+                return sz;
             }
             prev = cur;
-            cur = cur->siguiente;
+            cur  = cur->siguiente;
         }
         unlock();
         return 0;
     }
 
-    // Elimina (ignora tamaño devuelto)
-    void eliminar(void* direccion) {
-        (void)eliminar_y_tamano(direccion);
-    }
+    // Versión simple (compatible con código viejo)
+    void eliminar(void* ptr) { (void)eliminar_y_tamano(ptr); }
 
-    // Volcado básico de fugas
     void reportarFugas(std::ostream& os = std::cout) {
         lock();
-        if (cabeza == nullptr) {
+        if (!cabeza) {
             os << "[ListaGuardado] Sin registros pendientes.\n";
             unlock();
             return;
         }
-        os << "[ListaGuardado] Registros pendientes (posibles fugas):\n";
+        os << "[ListaGuardado] Posibles fugas:\n";
         Guardado* cur = cabeza;
-        int idx = 0;
+        int i = 0; long long totalB = 0;
         while (cur) {
-            os << "  #" << idx++
-               << " ptr=" << cur->direccion
+            os << "  #" << i++
+               << " ptr="   << cur->direccion
                << " bytes=" << cur->tamano
-               << " tipo=" << cur->tipo
-               << " t=" << static_cast<long long>(cur->marcaDeTiempo)
+               << " tipo="  << cur->tipo
+               << " file="  << cur->archivo << ":" << cur->linea
+               << " t="     << (long long)cur->marcaDeTiempo
                << "\n";
+            totalB += (long long)cur->tamano;
             cur = cur->siguiente;
         }
-        os << "Total pendientes: " << conteo
-           << "  Bytes vivos estimados: " << bytes_totales << "\n";
+        os << "Total: " << i << " asignaciones; " << totalB << " bytes.\n";
         unlock();
     }
 
@@ -117,10 +115,11 @@ private:
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
 };
 
-// Lista global (definida en memory_instrumentation.cpp)
+// Definida en memory_instrumentation.cpp
 extern ListaGuardado listaGlobal;
 
 #endif // LISTA_GUARDADO_H
+
 
 
 

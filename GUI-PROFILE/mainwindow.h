@@ -8,12 +8,23 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QProcess>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QTableWidget>
+#include <QHash>
 
-// Qt Charts (incluye los headers de las clases que usamos)
+// Qt Charts (clases sin prefijo de namespace)
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarCategoryAxis>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,40 +39,114 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    // Tabs
+    // ---- Servidor de sockets ----
+    QTcpServer* server = nullptr;
+    QTcpSocket* client = nullptr;
+    int serverPort = 5555;
+    QByteArray rxBuffer;
+
+    // ---- Datos (modelo en la GUI) ----
+    struct Alloc {
+        quintptr ptr;
+        qint64   bytes;
+        QString  type;   // "new" / "new[]"
+        QString  file;
+        int      line;
+        qint64   ts_ms;  // timestamp ms (epoch)
+    };
+    QHash<quintptr, Alloc> alive;
+    QHash<QString, qint64> aliveCountByFile;
+    QHash<QString, qint64> aliveBytesByFile;
+
+    qint64 totalAllocs = 0;
+    qint64 liveBytes   = 0;
+    qint64 maxLiveMB   = 0; // pico observado
+
+    // ====== Tabs ======
     QTabWidget* tabs = nullptr;
+
+    // ---- Pestaña: Vista General ----
+    QWidget* tabOverview = nullptr;
+    QLabel *lblMemMB = nullptr, *lblLive = nullptr, *lblLeakMB = nullptr,
+                                                        *lblMaxMB = nullptr, *lblTotalAlloc = nullptr;
+
+    QChartView*  ovChartView = nullptr;
+    QChart*      ovChart     = nullptr;
+    QLineSeries* ovSeries    = nullptr;
+    QValueAxis*  ovAxisX     = nullptr;
+    QValueAxis*  ovAxisY     = nullptr;
+    double t0_ms = -1;
+
+    QTableWidget* ovTop3 = nullptr;
+
+    // ---- Pestaña: Mapa de memoria ----
+    QWidget* tabMap = nullptr;
+    QTableWidget* tblMap = nullptr;
+    QHash<quintptr,int> rowOfPtr;
+
+    // ---- Pestaña: Asignación por archivo ----
+    QWidget* tabByFile = nullptr;
+    QChartView* byChartView = nullptr;
+    QChart*     byChart     = nullptr;
+    QBarSeries* bySeries    = nullptr;
+    QBarCategoryAxis* byAxisX = nullptr;
+    QValueAxis*  byAxisY    = nullptr;
+
+    // ---- Pestaña: Memory leaks ----
     QWidget* tabLeaks = nullptr;
+    QLabel *lblLeaksTotalMB = nullptr, *lblLeakLargest = nullptr,
+                                           *lblLeakFileMost = nullptr, *lblLeakRate = nullptr;
 
-    // Gráfico (series de "live" y "bytes")
-    QChartView*  chartView  = nullptr;
-    QChart*      chart      = nullptr;
-    QLineSeries* seriesLive = nullptr;
-    QLineSeries* seriesBytes= nullptr;
-    QValueAxis*  axisX      = nullptr;
-    QValueAxis*  axisY      = nullptr;
+    QChartView* leakBarView = nullptr;   // barras por archivo
+    QChart*     leakBarChart = nullptr;
+    QBarSeries* leakBarSeries = nullptr;
+    QBarCategoryAxis* leakBarAxisX = nullptr;
+    QValueAxis* leakBarAxisY = nullptr;
 
-    // (La GUI NO se mide a sí misma)
-    QLabel* lblVivas = nullptr;
-    QLabel* lblBytes = nullptr;
+    QChartView* leakPieView = nullptr;   // pie por archivo
+    QChart*     leakPieChart = nullptr;
+    QPieSeries* leakPieSeries = nullptr;
 
-    // Proceso externo (programa medible)
-    QProcess*    proc         = nullptr;
+    QChartView* leakTimeView = nullptr;  // temporal de leaks detectados
+    QChart*     leakTimeChart = nullptr;
+    QLineSeries* leakTimeSeries = nullptr;
+    QValueAxis*  leakTimeAxisX = nullptr;
+    QValueAxis*  leakTimeAxisY = nullptr;
+
+    // ---- Botones (demo) ----
     QPushButton* btnStartDemo = nullptr;
     QPushButton* btnStopDemo  = nullptr;
+    QProcess*    demoProc     = nullptr;
 
-    // Estado eje X
-    double xWindowSec = 60.0;
+    // ====== Métodos ======
+    void startServer();
+    void processLine(const QByteArray& line);
+    void handleAlloc(const QJsonObject& o);
+    void handleFree(const QJsonObject& o);
+    void handleTick(const QJsonObject& o);
+    void onClientDisconnectedComputeLeaks();
 
-    void setupLeaksTab();
+    // UI helpers
+    void buildTabs();
+    void updateOverview();
+    void updateTop3();
+    void updateMapAdd(const Alloc& a);
+    void updateMapRemove(quintptr ptr);
+    void updateByFileChart();
+    void updateLeakChartsFromAlive(); // si lo necesitas más adelante
 
 private slots:
+    void onNewConnection();
+    void onReadyRead();
+    void onClientDisconnected();
+
     void onStartDemo();
     void onStopDemo();
-    void onProcReadyRead();
-    void onProcFinished(int code, QProcess::ExitStatus st);
+    void onDemoFinished(int, QProcess::ExitStatus);
 };
 
 #endif // MAINWINDOW_H
+
 
 
 
