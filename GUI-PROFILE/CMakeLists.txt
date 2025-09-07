@@ -9,76 +9,52 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# Qt para la GUI (incluye Charts)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Charts)
 
-set(PROJECT_SOURCES
-    # Forms
-        mainwindow.ui
-
-        # Header Files
-        ListaGuardado.h
-        mainwindow.h
-        memory_instrumentation.h
-
-        # Source Files
-        main.cpp
-        mainwindow.cpp
-        memory_instrumentation.cpp
+# ===== Librería de instrumentación (no depende de Qt) =====
+add_library(memprof_runtime STATIC
+    memory_instrumentation.cpp
+)
+target_include_directories(memprof_runtime PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(GUI-PROFILE
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        memory_instrumentation.h memory_instrumentation.cpp
-
-
-        ListaGuardado.h
-
-        #ListaGuardado.cpp
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET GUI-PROFILE APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(GUI-PROFILE SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(GUI-PROFILE
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
-
-target_link_libraries(GUI-PROFILE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.GUI-PROFILE)
-endif()
+# ===== GUI (el "medidor": NO se mide a sí misma) =====
+add_executable(GUI-PROFILE
+    main.cpp
+    mainwindow.h
+    mainwindow.cpp
+    mainwindow.ui
+    ListaGuardado.h
+    memory_instrumentation.h
+)
+target_link_libraries(GUI-PROFILE
+    PRIVATE
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Charts
+        memprof_runtime
+)
 set_target_properties(GUI-PROFILE PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+if(QT_VERSION_MAJOR EQUAL 6)
+  qt_finalize_executable(GUI-PROFILE)
+endif()
+
+# ===== Programa medible externo =====
+add_executable(MemTargetDemo
+    demo_app.cpp
+    ListaGuardado.h
+    memory_instrumentation.h
+)
+target_link_libraries(MemTargetDemo PRIVATE memprof_runtime)
 
 include(GNUInstallDirs)
-install(TARGETS GUI-PROFILE
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+install(TARGETS GUI-PROFILE MemTargetDemo
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE  DESTINATION .
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(GUI-PROFILE)
-endif()

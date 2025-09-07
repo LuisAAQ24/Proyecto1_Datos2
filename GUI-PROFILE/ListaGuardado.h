@@ -1,65 +1,127 @@
 #ifndef LISTA_GUARDADO_H
 #define LISTA_GUARDADO_H
 
+// Implementación ligera y sin asignaciones con new/delete para evitar reentrancia.
+// Usa malloc/free internamente y un spinlock sencillo.
+
+#include <cstddef>
+#include <cstdint>
 #include <ctime>
-#include <string>
+#include <cstring>
+#include <atomic>
 #include <iostream>
 
-// Nodo de la lista
 struct Guardado {
     void* direccion;
-    size_t tamano;
-    std::string tipo;
-    time_t marcaDeTiempo;
+    std::size_t tamano;
+    char tipo[32];          // tipo comprimido (sin std::string)
+    std::time_t marcaDeTiempo;
     Guardado* siguiente;
 };
 
-// Lista de asignaciones
 class ListaGuardado {
-private:
-    Guardado* inicio = nullptr;
-
 public:
-    void agregar(void* direccion, size_t tamano, const std::string& tipo) {
-        Guardado* nodo = new Guardado{direccion, tamano, tipo, std::time(nullptr), inicio};
-        inicio = nodo;
+    ListaGuardado() : cabeza(nullptr), conteo(0), bytes_totales(0) {
+        flag.clear();
     }
 
-    void eliminar(void* direccion) {
-        Guardado* anterior = nullptr;
-        Guardado* actual = inicio;
-        while (actual) {
-            if (actual->direccion == direccion) {
-                if (anterior) anterior->siguiente = actual->siguiente;
-                else inicio = actual->siguiente;
-                delete actual;
-                return;
-            }
-            anterior = actual;
-            actual = actual->siguiente;
+    // Agrega un registro (NO usa new, solo malloc)
+    void agregar(void* direccion, std::size_t tamano, const char* tipo) {
+        if (!direccion) return;
+        Guardado* nodo = static_cast<Guardado*>(std::malloc(sizeof(Guardado)));
+        if (!nodo) return; // sin memoria, omitimos
+        nodo->direccion = direccion;
+        nodo->tamano = tamano;
+        std::time(&nodo->marcaDeTiempo);
+        std::memset(nodo->tipo, 0, sizeof(nodo->tipo));
+        if (tipo) {
+            std::strncpy(nodo->tipo, tipo, sizeof(nodo->tipo) - 1);
+        } else {
+            std::strncpy(nodo->tipo, "desconocido", sizeof(nodo->tipo) - 1);
         }
+
+        lock();
+        nodo->siguiente = cabeza;
+        cabeza = nodo;
+        ++conteo;
+        bytes_totales += static_cast<long long>(tamano);
+        unlock();
     }
 
-    void reportarFugas() {
-        Guardado* actual = inicio;
-        std::cout << "\n===== REPORTE DE FUGAS =====\n";
-        if (!actual) {
-            std::cout << "No se detectaron fugas de memoria ✅\n";
+    // Elimina el registro de 'direccion' (si existe) y devuelve el tamaño asociado.
+    std::size_t eliminar_y_tamano(void* direccion) {
+        if (!direccion) return 0;
+        lock();
+        Guardado* prev = nullptr;
+        Guardado* cur = cabeza;
+        while (cur) {
+            if (cur->direccion == direccion) {
+                // quitar
+                if (prev) prev->siguiente = cur->siguiente;
+                else      cabeza = cur->siguiente;
+                std::size_t tam = cur->tamano;
+                --conteo;
+                bytes_totales -= static_cast<long long>(tam);
+                unlock();
+                std::free(cur);
+                return tam;
+            }
+            prev = cur;
+            cur = cur->siguiente;
+        }
+        unlock();
+        return 0;
+    }
+
+    // Elimina (ignora tamaño devuelto)
+    void eliminar(void* direccion) {
+        (void)eliminar_y_tamano(direccion);
+    }
+
+    // Volcado básico de fugas
+    void reportarFugas(std::ostream& os = std::cout) {
+        lock();
+        if (cabeza == nullptr) {
+            os << "[ListaGuardado] Sin registros pendientes.\n";
+            unlock();
             return;
         }
-        while (actual) {
-            std::cout << "Fuga en direccion " << actual->direccion
-                      << " | " << actual->tamano << " bytes"
-                      << " | Tiempo: " << actual->marcaDeTiempo << std::endl;
-            actual = actual->siguiente;
+        os << "[ListaGuardado] Registros pendientes (posibles fugas):\n";
+        Guardado* cur = cabeza;
+        int idx = 0;
+        while (cur) {
+            os << "  #" << idx++
+               << " ptr=" << cur->direccion
+               << " bytes=" << cur->tamano
+               << " tipo=" << cur->tipo
+               << " t=" << static_cast<long long>(cur->marcaDeTiempo)
+               << "\n";
+            cur = cur->siguiente;
         }
+        os << "Total pendientes: " << conteo
+           << "  Bytes vivos estimados: " << bytes_totales << "\n";
+        unlock();
     }
+
+    long long count() const { return conteo.load(std::memory_order_relaxed); }
+    long long bytes() const { return bytes_totales.load(std::memory_order_relaxed); }
+
+private:
+    // Spinlock simple
+    void lock()   { while (flag.test_and_set(std::memory_order_acquire)) { } }
+    void unlock() { flag.clear(std::memory_order_release); }
+
+    Guardado* cabeza;
+    std::atomic<long long> conteo;
+    std::atomic<long long> bytes_totales;
+    std::atomic_flag flag = ATOMIC_FLAG_INIT;
 };
 
-// Lista global
+// Lista global (definida en memory_instrumentation.cpp)
 extern ListaGuardado listaGlobal;
 
-#endif
+#endif // LISTA_GUARDADO_H
+
 
 
 

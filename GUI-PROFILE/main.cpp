@@ -1,40 +1,24 @@
 #include <QApplication>
 #include "mainwindow.h"
-#include "ListaGuardado.h"
+#include "memory_instrumentation.h"
 
-extern void reporteAlSalir();
+// NO medir a la propia GUI
 extern bool profilerActivo;
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    MainWindow window;
-    window.show();
+    // Desactiva medición en este proceso (GUI es el "medidor")
+    profilerActivo = false;
 
-    // Dejamos que Qt haga su loop primero
-    int resultado = app.exec();
+    MainWindow w;
+    w.show();
 
-    // Activar profiler para pruebas de memoria
-    profilerActivo = true;
-
-    // Pruebas de memoria después de cerrar la ventana
-    int* a = new int(10);
-    delete a;
-
-    int* arr = new int[5];
-    delete[] arr;
-
-    double* d = new double[3]; // fuga intencional
-    char* c = new char('X');
-    delete c;
-    float* f = new float[10];  // fuga intencional
-
-    // Reporte de fugas
-    reporteAlSalir();
-
-    return resultado;
+    // NO llamamos reporteAlSalir aquí para no activar impresiones adicionales.
+    return app.exec();
 }
+
 
 
 
