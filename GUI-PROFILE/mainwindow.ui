@@ -24,27 +24,52 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="tabWidgetPage1" native="true">
+    <widget class="QWidget" name="tabWidgetPage1">
      <attribute name="title">
       <string>Hola</string>
      </attribute>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QWidget" name="leaksChartContainer" native="true">
       <property name="geometry">
        <rect>
-        <x>280</x>
-        <y>160</y>
-        <width>75</width>
-        <height>20</height>
+        <x>80</x>
+        <y>90</y>
+        <width>158</width>
+        <height>78</height>
        </rect>
       </property>
-      <property name="text">
-       <string>CheckBox</string>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>-10</y>
+         <width>160</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout" rowstretch="0" columnstretch="0"/>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>160</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3"/>
      </widget>
     </widget>
-    <widget class="QWidget" name="tabWidgetPage2" native="true">
+    <widget class="QWidget" name="tabWidgetPage2">
      <attribute name="title">
       <string/>
      </attribute>
@@ -70,7 +95,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

@@ -11,7 +11,7 @@ extern bool profilerActivo;
 // Funciones para JSON y reporte
 void guardarReporteJSON();
 void reporteAlSalir();
-
+void enviarResumenSocket();
 // Sobrecarga global de new/delete
 void* operator new(std::size_t tamano);
 void operator delete(void* direccion) noexcept;

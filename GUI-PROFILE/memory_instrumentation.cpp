@@ -1,8 +1,11 @@
 #include "ListaGuardado.h"
 #include "memory_instrumentation.h"
+#include <QTcpSocket>
+
 #include <cstdlib>
 #include <new>
 #include <string>
+#include <sstream>
 
 ListaGuardado listaGlobal;
 bool profilerActivo = false;
@@ -78,6 +81,37 @@ void guardarReporteJSON() {
     auto fugas = listaGlobal.reportLeaks();
     listaGlobal.exportJSON(fugas);
 }
+void enviarResumenSocket() {
+    auto fugas = listaGlobal.reportLeaks();
+    std::string json = "{\"leaks\":[";
+    for (size_t i = 0; i < fugas.size(); ++i) {
+        const auto& f = fugas[i];
+
+        // convertir el puntero a string (ej. "0x7ffee1234")
+        std::ostringstream oss;
+        oss << f.direccion;
+
+        json += "{";
+        json += "\"ptr\":\"" + oss.str() + "\",";
+        json += "\"size\":" + std::to_string(f.tamano);
+        json += "}";
+        if (i + 1 < fugas.size()) json += ",";
+    }
+    json += "]}\n"; // 👈 importante para que la GUI lo lea con readLine()
+
+    qDebug() << "[LIB] json enviado:" << QString::fromStdString(json);
+
+    QTcpSocket sock;
+    sock.connectToHost("127.0.0.1", 5050);
+    if (sock.waitForConnected(500)) {
+        sock.write(json.c_str(), json.size());
+        sock.flush();
+        sock.waitForBytesWritten(500);
+    } else {
+        qWarning() << "[LIB] no se pudo conectar al servidor GUI";
+    }
+}
+
 
 void reporteAlSalir() {
     auto fugas = listaGlobal.reportLeaks();

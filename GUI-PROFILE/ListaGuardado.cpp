@@ -80,7 +80,7 @@ std::vector<Fuga> ListaGuardado::reportLeaks() {
 
 void ListaGuardado::exportJSON(const std::vector<Fuga>& fugas, const std::string& /*filename ignorado*/) {
     // Ruta fija
-    std::string fullpath = "C:/Users/cesar/Documents/Proyecto1_Datos2/memory_report.json";
+    std::string fullpath = "C:/Users/luisa/Documents/GitHub/Proyecto1_Datos22/memory_report.json";
     std::ofstream file(fullpath);
     if (!file.is_open()) {
         std::cerr << "Error al abrir el archivo JSON para escritura\n";
@@ -104,6 +104,7 @@ void ListaGuardado::exportJSON(const std::vector<Fuga>& fugas, const std::string
     file.close();
 
     std::cout << "Archivo JSON generado: " << fullpath << "\n";
+
 }
 
 

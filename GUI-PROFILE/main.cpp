@@ -5,6 +5,7 @@
 #include "memory_instrumentation.h"
 #include <string>
 
+
 struct Dummy {
     std::string texto;
     Dummy(const std::string& t) : texto(t) {
@@ -51,6 +52,9 @@ void pruebasMemoria() {
     reporteAlSalir();
 
     profilerActivo = false;
+    guardarReporteJSON();
+    reporteAlSalir();
+    enviarResumenSocket();
 }
 
 int main(int argc, char *argv[])

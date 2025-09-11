@@ -1,25 +1,32 @@
 {
   "fugas": [
     {
-      "direccion": "0x275661078f0",
+      "direccion": "0x21bf6a6e3f0",
       "tamano": 32,
       "tipo": "new",
       "archivo": "",
-      "marcaDeTiempo": 1757146844
+      "marcaDeTiempo": 1757597915
     },
     {
-      "direccion": "0x275661159c0",
-      "tamano": 4,
-      "tipo": "new",
-      "archivo": "",
-      "marcaDeTiempo": 1757146844
-    },
-    {
-      "direccion": "0x27566141ac0",
+      "direccion": "0x21bf6a2ae60",
       "tamano": 400,
       "tipo": "new[]",
       "archivo": "",
-      "marcaDeTiempo": 1757146844
+      "marcaDeTiempo": 1757597915
+    },
+    {
+      "direccion": "0x21bf6a21670",
+      "tamano": 4,
+      "tipo": "new",
+      "archivo": "",
+      "marcaDeTiempo": 1757597915
+    },
+    {
+      "direccion": "0x21bf6a2b340",
+      "tamano": 400,
+      "tipo": "new[]",
+      "archivo": "",
+      "marcaDeTiempo": 1757597915
     }
   ]
 }
