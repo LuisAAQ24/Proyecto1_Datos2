@@ -4,6 +4,11 @@
 #include "ListaGuardado.h"
 #include <vector>
 #include <iostream>
+#include "ServidorSocket.h"
+
+// Servidor global (opcional, puntero)
+extern ServidorSocket* servidorSocket;
+
 
 // Flag global para activar profiler
 extern bool profilerActivo;

@@ -3,10 +3,13 @@
 #include "mainwindow.h"
 #include "ListaGuardado.h"
 #include "memory_instrumentation.h"
+#include "ServidorSocket.h"
 #include <string>
+#include <iostream>
 
 struct Dummy {
     std::string texto;
+    Dummy() = default;
     Dummy(const std::string& t) : texto(t) {
         std::cout << "Dummy creado: " << texto << "\n";
     }
@@ -28,7 +31,12 @@ void pruebasMemoria() {
     Dummy* d1 = new Dummy("objeto 1");
 
     int* arr = new int[100];      // array simple
-    Dummy* arrObj = new Dummy[3] {{"uno"}, {"dos"}, {"tres"}};
+
+    // Array de Dummy seguro
+    Dummy* arrObj = new Dummy[3];
+    arrObj[0] = Dummy("uno");
+    arrObj[1] = Dummy("dos");
+    arrObj[2] = Dummy("tres");
 
     // Liberar correctamente
     delete a;
@@ -40,9 +48,9 @@ void pruebasMemoria() {
     // ---------------------------
     // Fugas intencionales
     // ---------------------------
-    new int(99);                          // fuga simple
-    new double[50];                       // fuga array
-    new Dummy("fuga objeto");             // fuga objeto
+    new int(99);                // fuga simple
+    new double[50];             // fuga array
+    new Dummy("fuga objeto");   // fuga objeto
 
     // ---------------------------
     // Guardar JSON y reporte
@@ -56,14 +64,25 @@ void pruebasMemoria() {
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    // Crear GUI
     MainWindow window;
     window.show();
 
+    // ---------------------------
+    // Inicializar servidor socket
+    // ---------------------------
+    servidorSocket = new ServidorSocket(&window);
+    if(!servidorSocket->listen(QHostAddress::Any, 12345))
+        qDebug() << "Error iniciando servidor:" << servidorSocket->errorString();
+    else
+        qDebug() << "Servidor socket iniciado en puerto 12345";
+
+    // Ejecutar pruebas de memoria después de 1 segundo
     QTimer::singleShot(1000, pruebasMemoria);
 
     return app.exec();
 }
-
 
 
 
