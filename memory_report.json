@@ -1,25 +1,17 @@
 {
-  "fugas": [
-    {
-      "direccion": "0x2c6273d5210",
-      "tamano": 32,
-      "tipo": "new",
-      "archivo": "memory_instrumentation.cpp",
-      "marcaDeTiempo": 1757473192
-    },
-    {
-      "direccion": "0x2c62741e9d0",
-      "tamano": 400,
-      "tipo": "new[]",
-      "archivo": "memory_instrumentation.cpp",
-      "marcaDeTiempo": 1757473192
-    },
-    {
-      "direccion": "0x2c627424330",
-      "tamano": 4,
-      "tipo": "new",
-      "archivo": "memory_instrumentation.cpp",
-      "marcaDeTiempo": 1757473192
+    "fugas": [
+        {
+            "archivo": "memory_instrumentation.cpp",
+            "direccion": "217946b5010",
+            "marcaDeTiempo": 1757712830,
+            "tamano": 4,
+            "tipo": "new"
+        }
+    ],
+    "metricas": {
+        "maxMemoriaUsada": 92,
+        "memoriaActual": 92,
+        "totalAsignaciones": 3,
+        "totalLiberaciones": 1
     }
-  ]
 }

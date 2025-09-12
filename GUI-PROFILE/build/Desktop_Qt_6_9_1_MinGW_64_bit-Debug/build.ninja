@@ -89,9 +89,9 @@ build CMakeFiles/GUI-PROFILE.dir/ListaGuardado.cpp.obj: CXX_COMPILER__GUI-PROFIL
   OBJECT_DIR = CMakeFiles\GUI-PROFILE.dir
   OBJECT_FILE_DIR = CMakeFiles\GUI-PROFILE.dir
 
-build CMakeFiles/GUI-PROFILE.dir/servidorsocket.cpp.obj: CXX_COMPILER__GUI-PROFILE_unscanned_Debug C$:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/servidorsocket.cpp || cmake_object_order_depends_target_GUI-PROFILE
+build CMakeFiles/GUI-PROFILE.dir/ServidorSocket.cpp.obj: CXX_COMPILER__GUI-PROFILE_unscanned_Debug C$:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/ServidorSocket.cpp || cmake_object_order_depends_target_GUI-PROFILE
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
-  DEP_FILE = CMakeFiles\GUI-PROFILE.dir\servidorsocket.cpp.obj.d
+  DEP_FILE = CMakeFiles\GUI-PROFILE.dir\ServidorSocket.cpp.obj.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/GUI-PROFILE_autogen/include -isystem C:/Qt/6.9.1/mingw_64/include/QtCore -isystem C:/Qt/6.9.1/mingw_64/include -isystem C:/Qt/6.9.1/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.9.1/mingw_64/include/QtWidgets -isystem C:/Qt/6.9.1/mingw_64/include/QtGui -isystem C:/Qt/6.9.1/mingw_64/include/QtNetwork
   OBJECT_DIR = CMakeFiles\GUI-PROFILE.dir
@@ -105,7 +105,7 @@ build CMakeFiles/GUI-PROFILE.dir/servidorsocket.cpp.obj: CXX_COMPILER__GUI-PROFI
 #############################################
 # Link the executable GUI-PROFILE.exe
 
-build GUI-PROFILE.exe: CXX_EXECUTABLE_LINKER__GUI-PROFILE_Debug CMakeFiles/GUI-PROFILE.dir/GUI-PROFILE_autogen/mocs_compilation.cpp.obj CMakeFiles/GUI-PROFILE.dir/main.cpp.obj CMakeFiles/GUI-PROFILE.dir/mainwindow.cpp.obj CMakeFiles/GUI-PROFILE.dir/memory_instrumentation.cpp.obj CMakeFiles/GUI-PROFILE.dir/ListaGuardado.cpp.obj CMakeFiles/GUI-PROFILE.dir/servidorsocket.cpp.obj | C$:/Qt/6.9.1/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Network.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Core.a C$:/Qt/6.9.1/mingw_64/lib/libQt6EntryPoint.a || GUI-PROFILE_autogen GUI-PROFILE_autogen_timestamp_deps
+build GUI-PROFILE.exe: CXX_EXECUTABLE_LINKER__GUI-PROFILE_Debug CMakeFiles/GUI-PROFILE.dir/GUI-PROFILE_autogen/mocs_compilation.cpp.obj CMakeFiles/GUI-PROFILE.dir/main.cpp.obj CMakeFiles/GUI-PROFILE.dir/mainwindow.cpp.obj CMakeFiles/GUI-PROFILE.dir/memory_instrumentation.cpp.obj CMakeFiles/GUI-PROFILE.dir/ListaGuardado.cpp.obj CMakeFiles/GUI-PROFILE.dir/ServidorSocket.cpp.obj | C$:/Qt/6.9.1/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Network.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.1/mingw_64/lib/libQt6Core.a C$:/Qt/6.9.1/mingw_64/lib/libQt6EntryPoint.a || GUI-PROFILE_autogen GUI-PROFILE_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = C:/Qt/6.9.1/mingw_64/lib/libQt6Widgets.a  C:/Qt/6.9.1/mingw_64/lib/libQt6Network.a  C:/Qt/6.9.1/mingw_64/lib/libQt6Gui.a  -ld3d11  -ldxgi  -ldxguid  -ld3d12  C:/Qt/6.9.1/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lmingw32  C:/Qt/6.9.1/mingw_64/lib/libQt6EntryPoint.a  -lshell32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

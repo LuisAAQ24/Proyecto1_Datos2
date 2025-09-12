@@ -5,10 +5,17 @@
 
 
 void ListaGuardado::agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo) {
-    // No agregar si ya existe
+    // 🚫 Si el archivo es de Qt, ignorar
+    if (archivo.find("Qt") != std::string::npos ||
+        archivo.find("qtcpsocket") != std::string::npos ||
+        archivo.find("qobject") != std::string::npos) {
+        return;
+    }
+
+    // Evitar duplicados
     Guardado* actual = inicio;
     while (actual) {
-        if (actual->direccion == direccion) return; // ya registrado
+        if (actual->direccion == direccion) return;
         actual = actual->siguiente;
     }
 
@@ -21,7 +28,16 @@ void ListaGuardado::agregar(void* direccion, size_t tamano, const std::string& t
     nodo->marcaDeTiempo = std::time(nullptr);
     nodo->siguiente = inicio;
     inicio = nodo;
+
+    // 📊 Actualizar métricas
+    totalAsignaciones++;
+    memoriaActual += tamano;
+    if (memoriaActual > maxMemoriaUsada) {
+        maxMemoriaUsada = memoriaActual;
+    }
 }
+
+
 
 
 
@@ -33,10 +49,12 @@ void ListaGuardado::eliminar(void* direccion) {
             if (anterior) anterior->siguiente = actual->siguiente;
             else inicio = actual->siguiente;
 
-            // ✅ destruir strings antes de liberar memoria cruda
+            // 📊 Actualizar métricas
+            totalLiberaciones++;
+            memoriaActual -= actual->tamano;
+
             actual->tipo.~basic_string();
             actual->archivo.~basic_string();
-
             std::free(actual);
             return;
         }
@@ -45,12 +63,12 @@ void ListaGuardado::eliminar(void* direccion) {
     }
 }
 
+
 void ListaGuardado::limpiar() {
     Guardado* actual = inicio;
     while (actual) {
         Guardado* siguiente = actual->siguiente;
 
-        // ✅ destruir strings
         actual->tipo.~basic_string();
         actual->archivo.~basic_string();
 
@@ -58,7 +76,14 @@ void ListaGuardado::limpiar() {
         actual = siguiente;
     }
     inicio = nullptr;
+
+    // ✅ Reiniciar métricas
+    totalAsignaciones = 0;
+    totalLiberaciones = 0;
+    memoriaActual = 0;
+    maxMemoriaUsada = 0;
 }
+
 
 
 std::vector<Fuga> ListaGuardado::reportLeaks() {
@@ -78,35 +103,16 @@ std::vector<Fuga> ListaGuardado::reportLeaks() {
     return fugas;
 }
 
-void ListaGuardado::exportJSON(const std::vector<Fuga>& fugas, const std::string& /*filename ignorado*/) {
-    // Ruta fija
-    std::string fullpath = "C:/Users/cesar/Documents/Proyecto1_Datos2/memory_report.json";
-    std::ofstream file(fullpath);
-    if (!file.is_open()) {
-        std::cerr << "Error al abrir el archivo JSON para escritura\n";
-        return;
-    }
 
-    file << "{\n  \"fugas\": [\n";
-    for (size_t i = 0; i < fugas.size(); ++i) {
-        const Fuga& f = fugas[i];
-        file << "    {\n";
-        file << "      \"direccion\": \"" << f.direccion << "\",\n";
-        file << "      \"tamano\": " << f.tamano << ",\n";
-        file << "      \"tipo\": \"" << f.tipo << "\",\n";
-        file << "      \"archivo\": \"" << f.archivo << "\",\n";
-        file << "      \"marcaDeTiempo\": " << f.marcaDeTiempo << "\n";
-        file << "    }";
-        if (i != fugas.size() - 1) file << ",";
-        file << "\n";
-    }
-    file << "  ]\n}";
-    file.close();
 
-    std::cout << "Archivo JSON generado: " << fullpath << "\n";
+QJsonObject ListaGuardado::obtenerMetricas() {
+    QJsonObject obj;
+    obj["totalAsignaciones"] = static_cast<int>(totalAsignaciones);
+    obj["totalLiberaciones"] = static_cast<int>(totalLiberaciones);
+    obj["memoriaActual"] = static_cast<int>(memoriaActual);
+    obj["maxMemoriaUsada"] = static_cast<int>(maxMemoriaUsada);
+    return obj;
 }
-
-
 
 
 

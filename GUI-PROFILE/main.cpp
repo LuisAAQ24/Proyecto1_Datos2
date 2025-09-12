@@ -18,48 +18,28 @@ struct Dummy {
     }
 };
 
-// Función que hace pruebas de memoria y genera reporte
 void pruebasMemoria() {
-    listaGlobal.limpiar();
-    profilerActivo = true;
-
-    // ---------------------------
-    // Asignaciones correctas
-    // ---------------------------
-    int* a = new int(42);
-    double* b = new double(3.14159);
-    Dummy* d1 = new Dummy("objeto 1");
-
-    int* arr = new int[100];      // array simple
-
-    // Array de Dummy seguro
-    Dummy* arrObj = new Dummy[3];
-    arrObj[0] = Dummy("uno");
-    arrObj[1] = Dummy("dos");
-    arrObj[2] = Dummy("tres");
-
-    // Liberar correctamente
-    delete a;
-    delete b;
-    delete d1;
-    delete[] arr;
-    delete[] arrObj;
+    profilerActivo = true; // 🔹 activar profiler primero
+    listaGlobal.limpiar(); // 🔹 limpiar lista y reiniciar métricas
 
     // ---------------------------
     // Fugas intencionales
     // ---------------------------
-    new int(99);                // fuga simple
-    new double[50];             // fuga array
-    new Dummy("fuga objeto");   // fuga objeto
-
+    int* p = new int(99);  // ahora solo se cuenta esta asignación
+    delete p;
+    int* a = new int(19);
     // ---------------------------
     // Guardar JSON y reporte
     // ---------------------------
     guardarReporteJSON();
     reporteAlSalir();
 
+    // Si querés liberar memoria para no dejar fuga:
+    // delete p;
+
     profilerActivo = false;
 }
+
 
 int main(int argc, char *argv[])
 {

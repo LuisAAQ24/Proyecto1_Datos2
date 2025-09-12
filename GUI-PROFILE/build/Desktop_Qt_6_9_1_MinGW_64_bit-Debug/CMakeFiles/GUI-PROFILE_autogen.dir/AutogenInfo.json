@@ -389,6 +389,12 @@
 			null
 		],
 		[
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/ServidorSocket.h",
+			"MU",
+			"EWIEGA46WW/moc_ServidorSocket.cpp",
+			null
+		],
+		[
 			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -398,12 +404,6 @@
 			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/memory_instrumentation.h",
 			"MU",
 			"EWIEGA46WW/moc_memory_instrumentation.cpp",
-			null
-		],
-		[
-			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/servidorsocket.h",
-			"MU",
-			"EWIEGA46WW/moc_servidorsocket.cpp",
 			null
 		]
 	],
@@ -486,6 +486,11 @@
 			null
 		],
 		[
+			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/ServidorSocket.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/main.cpp",
 			"MU",
 			null
@@ -497,11 +502,6 @@
 		],
 		[
 			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/memory_instrumentation.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/cesar/Documents/Proyecto1_Datos2/GUI-PROFILE/servidorsocket.cpp",
 			"MU",
 			null
 		]

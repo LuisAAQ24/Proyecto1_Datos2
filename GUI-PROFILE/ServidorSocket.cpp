@@ -12,15 +12,14 @@ void ServidorSocket::incomingConnection(qintptr socketDescriptor)
 
     clientes.append(cliente);
 }
-
-void ServidorSocket::clienteDesconectado()
-{
+void ServidorSocket::clienteDesconectado() {
     QTcpSocket* cliente = qobject_cast<QTcpSocket*>(sender());
-    if(cliente) {
-        clientes.removeAll(cliente);
-        cliente->deleteLater();
+    if (cliente) {
+        clientes.removeAll(cliente);  // quitar de la lista
+        cliente->deleteLater();       // se libera seguro al terminar eventos pendientes
     }
 }
+
 
 void ServidorSocket::enviarJSON(const QString& json)
 {
