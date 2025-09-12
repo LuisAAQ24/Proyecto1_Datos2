@@ -1,17 +1,38 @@
 {
     "fugas": [
         {
-            "archivo": "memory_instrumentation.cpp",
-            "direccion": "217946b5010",
-            "marcaDeTiempo": 1757712830,
+            "archivo": "main.cpp:38",
+            "direccion": "2614ae65d10",
+            "marcaDeTiempo": 1757717601,
+            "tamano": 8,
+            "tipo": "new"
+        },
+        {
+            "archivo": "main.cpp:33",
+            "direccion": "2614ae04db0",
+            "marcaDeTiempo": 1757717601,
+            "tamano": 16,
+            "tipo": "new"
+        },
+        {
+            "archivo": "main.cpp:26",
+            "direccion": "2614ae05250",
+            "marcaDeTiempo": 1757717601,
+            "tamano": 20,
+            "tipo": "new[]"
+        },
+        {
+            "archivo": "main.cpp:20",
+            "direccion": "2614ae65c60",
+            "marcaDeTiempo": 1757717601,
             "tamano": 4,
             "tipo": "new"
         }
     ],
     "metricas": {
-        "maxMemoriaUsada": 92,
-        "memoriaActual": 92,
-        "totalAsignaciones": 3,
-        "totalLiberaciones": 1
+        "maxMemoriaUsada": 56,
+        "memoriaActual": 48,
+        "totalAsignaciones": 6,
+        "totalLiberaciones": 2
     }
 }

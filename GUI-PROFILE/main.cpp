@@ -7,40 +7,46 @@
 #include <string>
 #include <iostream>
 
-struct Dummy {
-    std::string texto;
-    Dummy() = default;
-    Dummy(const std::string& t) : texto(t) {
-        std::cout << "Dummy creado: " << texto << "\n";
-    }
-    ~Dummy() {
-        std::cout << "Dummy destruido: " << texto << "\n";
-    }
-};
+
 
 void pruebasMemoria() {
-    profilerActivo = true; // 🔹 activar profiler primero
-    listaGlobal.limpiar(); // 🔹 limpiar lista y reiniciar métricas
+    profilerActivo = true;          // Activar profiler
+    listaGlobal.limpiar();           // Limpiar cualquier registro previo
 
-    // ---------------------------
-    // Fugas intencionales
-    // ---------------------------
-    int* p = new int(99);  // ahora solo se cuenta esta asignación
-    delete p;
-    int* a = new int(19);
-    // ---------------------------
-    // Guardar JSON y reporte
-    // ---------------------------
+    std::cout << "=== Inicio de prueba de memoria ===\n";
+
+    // Asignaciones simples
+    int* p1 = new int(99);
+    int* p2 = new int(42);
+
+    // Liberamos p1, p2 queda como fuga
+    delete p1;
+
+    // Asignación de array
+    int* arr = new int[5]{1, 2, 3, 4, 5};
+    // Liberamos parcialmente arr para simular fuga
+    delete[] arr;
+
+    // Asignaciones dinámicas de objetos
+    struct Dummy { int x; double y; };
+    Dummy* d1 = new Dummy{10, 3.14};
+    Dummy* d2 = new Dummy{20, 6.28};
+    // Solo liberamos d1
+    delete d1;
+
+    // Asignación sin liberar (fuga intencional)
+    double* f = new double(2.718);
+
+    // Guardamos reporte JSON y mostramos métricas
     guardarReporteJSON();
     reporteAlSalir();
 
-    // Si querés liberar memoria para no dejar fuga:
-    // delete p;
-
+    // Limpiar profiler
     profilerActivo = false;
+    listaGlobal.limpiar();
+
+    std::cout << "=== Fin de prueba de memoria ===\n";
 }
-
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -49,9 +55,6 @@ int main(int argc, char *argv[])
     MainWindow window;
     window.show();
 
-    // ---------------------------
-    // Inicializar servidor socket
-    // ---------------------------
     servidorSocket = new ServidorSocket(&window);
     if(!servidorSocket->listen(QHostAddress::Any, 12345))
         qDebug() << "Error iniciando servidor:" << servidorSocket->errorString();
