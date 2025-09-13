@@ -2,22 +2,22 @@
     "fugas": [
         {
             "archivo": "main.cpp:26",
-            "direccion": "1ca95a852e0",
-            "marcaDeTiempo": 1757724309,
+            "direccion": "16912355520",
+            "marcaDeTiempo": 1757732036,
             "tamano": 8,
             "tipo": "new"
         },
         {
             "archivo": "main.cpp:25",
-            "direccion": "1ca959efd70",
-            "marcaDeTiempo": 1757724309,
+            "direccion": "169123834e0",
+            "marcaDeTiempo": 1757732036,
             "tamano": 16,
             "tipo": "new"
         },
         {
             "archivo": "main.cpp:20",
-            "direccion": "1ca95a852c0",
-            "marcaDeTiempo": 1757724309,
+            "direccion": "16912355510",
+            "marcaDeTiempo": 1757732036,
             "tamano": 4,
             "tipo": "new"
         }

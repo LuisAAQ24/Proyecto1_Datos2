@@ -128,7 +128,7 @@ void operator delete[](void* direccion) noexcept {
 
 
 
-
+//INCESESARIO
 void guardarReporteJSON() {
     auto fugas = listaGlobal.reportLeaks();
     QJsonObject root;
@@ -193,10 +193,22 @@ void enviarResumenPorArchivo() {
 
     QJsonDocument doc(root);
     servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
-
-
-
 }
+
+/*Ejemplo de JSON que se enviaría por socket:
+
+                                             Resumen por archivo:
+{
+    "tipo": "resumen_por_archivo",
+             "archivos": [
+                              {
+                                  "nombre": "main.cpp",
+                                  "conteo_asignaciones": 1,
+                                  "memoria_total": 40
+                              }
+    ]
+}
+*/
 
 void enviarReporteLeaks() {
     if (!servidorSocket) return;
@@ -226,7 +238,6 @@ void enviarReporteLeaks() {
             archivoMasLeaks = archivo;
         }
     }
-
 
     // Construir JSON
     QJsonObject root;
@@ -261,6 +272,19 @@ void enviarReporteLeaks() {
     servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
 }
 
+/*Reporte de leaks:
+{
+  "tipo": "reporte_leaks",
+  "total_fugado": 0,
+  "tasa_leaks": 0.0,
+  "leak_mas_grande": {
+    "tamano": 0,
+    "archivo": ""
+  },
+  "archivo_mas_leaks": "",
+  "leaks": []
+}
+*/
 
 
 
