@@ -44,6 +44,7 @@ public:
     void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "memory_report.json");
     QJsonObject obtenerMetricas();
     Guardado* getInicio() { return inicio; }
+    size_t getTotalAsignaciones() const { return totalAsignaciones; }
 };
 
 

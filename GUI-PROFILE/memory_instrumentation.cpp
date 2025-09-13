@@ -105,6 +105,8 @@ void operator delete(void* direccion, std::size_t) noexcept {
     std::free(direccion);
 }
 
+
+//ARREGLO CON TAMAÑO
 void operator delete[](void* direccion, std::size_t) noexcept {
     if (profilerActivo && direccion) {
         std::cout << "[DELETE[] sized] ptr=" << direccion << "\n";
@@ -113,6 +115,17 @@ void operator delete[](void* direccion, std::size_t) noexcept {
     }
     std::free(direccion);
 }
+
+//ARREGLO SIN TAMAÑO
+void operator delete[](void* direccion) noexcept {
+    if (profilerActivo && direccion) {
+        std::cout << "[DELETE[]] ptr=" << direccion << "\n";
+        listaGlobal.eliminar(direccion);
+        enviarAlSocket(direccion, 0, "delete[]", "");
+    }
+    std::free(direccion);
+}
+
 
 
 
@@ -152,6 +165,103 @@ void reporteAlSalir() {
         std::cout << "✅ No se detectaron fugas de memoria." << std::endl;
     }
 }
+
+void enviarResumenPorArchivo() {
+    if (!servidorSocket) return;
+
+    // Agrupar por archivo
+    std::map<std::string, std::pair<int, size_t>> resumen;
+    Guardado* actual = listaGlobal.getInicio();
+    while (actual) {
+        resumen[actual->archivo].first++;                  // conteo asignaciones
+        resumen[actual->archivo].second += actual->tamano; // memoria total
+        actual = actual->siguiente;
+    }
+
+    // Construir JSON
+    QJsonObject root;
+    root["tipo"] = "resumen_por_archivo";
+    QJsonArray archivosArray;
+    for (auto& [nombre, datos] : resumen) {
+        QJsonObject obj;
+        obj["nombre"] = QString::fromStdString(nombre);
+        obj["conteo_asignaciones"] = datos.first;
+        obj["memoria_total"] = static_cast<int>(datos.second);
+        archivosArray.append(obj);
+    }
+    root["archivos"] = archivosArray;
+
+    QJsonDocument doc(root);
+    servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
+
+
+
+}
+
+void enviarReporteLeaks() {
+    if (!servidorSocket) return;
+
+    auto fugas = listaGlobal.reportLeaks();
+
+    size_t totalFugado = 0;
+    size_t leakMasGrande = 0;
+    std::string archivoMasLeaks;
+    std::map<std::string, int> conteoPorArchivo;
+
+    // Analizar fugas
+    for (const auto& f : fugas) {
+        totalFugado += f.tamano;
+        if (f.tamano > leakMasGrande) {
+            leakMasGrande = f.tamano;
+            archivoMasLeaks = f.archivo; // opcional, si quieres que el leak más grande tenga su archivo
+        }
+        conteoPorArchivo[f.archivo]++;
+    }
+
+    // Encontrar archivo con más fugas
+    int maxLeaks = 0;
+    for (auto& [archivo, conteo] : conteoPorArchivo) {
+        if (conteo > maxLeaks) {
+            maxLeaks = conteo;
+            archivoMasLeaks = archivo;
+        }
+    }
+
+
+    // Construir JSON
+    QJsonObject root;
+    root["tipo"] = "reporte_leaks";
+    root["total_fugado"] = static_cast<int>(totalFugado);
+    root["tasa_leaks"] = (listaGlobal.getTotalAsignaciones() > 0)
+                             ? double(fugas.size()) / listaGlobal.getTotalAsignaciones()
+                             : 0.0;
+
+    // Leak más grande
+    if (!fugas.empty()) {
+        QJsonObject leakObj;
+        leakObj["tamano"] = static_cast<int>(leakMasGrande);
+        leakObj["archivo"] = QString::fromStdString(archivoMasLeaks);
+        root["leak_mas_grande"] = leakObj;
+    }
+
+    root["archivo_mas_leaks"] = QString::fromStdString(archivoMasLeaks);
+
+    // Lista de fugas
+    QJsonArray leaksArray;
+    for (const auto& f : fugas) {
+        QJsonObject obj;
+        obj["direccion"] = QString::number(reinterpret_cast<quintptr>(f.direccion), 16);
+        obj["tamano"] = static_cast<int>(f.tamano);
+        obj["archivo"] = QString::fromStdString(f.archivo);
+        leaksArray.append(obj);
+    }
+    root["leaks"] = leaksArray;
+
+    QJsonDocument doc(root);
+    servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
+}
+
+
 
 
 
