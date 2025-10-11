@@ -1,12 +1,9 @@
 #ifndef LISTA_GUARDADO_H
 #define LISTA_GUARDADO_H
 
-
 #include <ctime>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <fstream>
 #include <QJsonObject>
 
 
@@ -41,7 +38,7 @@ public:
     void eliminar(void* direccion);
     void limpiar();
     std::vector<Fuga> reportLeaks();
-    void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "memory_report.json");
+    //void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "memory_report.json");
     QJsonObject obtenerMetricas();
     Guardado* getInicio() { return inicio; }
     size_t getTotalAsignaciones() const { return totalAsignaciones; }

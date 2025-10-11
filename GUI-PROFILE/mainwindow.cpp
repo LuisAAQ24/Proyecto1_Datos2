@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ListaGuardado.h" // Asegúrate de que esta inclusión está presente
+#include "ListaGuardado.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -225,6 +225,11 @@ void MainWindow::actualizarMapaMemoria()
     Guardado* actual = listaGlobal.getInicio();
     int row = 0;
     while(actual) {
+        QString archivo = QString::fromStdString(actual->archivo);
+        if (archivo.startsWith("Unknown (lib/STL)")) {
+            actual = actual->siguiente;
+            continue; // Saltar esta asignación y pasar a la siguiente
+        }
         ui->tableMapaMemoria->insertRow(row);
         ui->tableMapaMemoria->setItem(row, 0, new QTableWidgetItem(QString("0x%1").arg(reinterpret_cast<quintptr>(actual->direccion), 16, 16, QChar('0'))));
         ui->tableMapaMemoria->setItem(row, 1, new QTableWidgetItem(QString::number(actual->tamano)));
@@ -242,6 +247,11 @@ void MainWindow::actualizarAsignacionPorArchivo()
     std::map<std::string, std::pair<int, size_t>> resumen;
     Guardado* actual = listaGlobal.getInicio();
     while (actual) {
+        QString archivo = QString::fromStdString(actual->archivo);
+        if (archivo.startsWith("Unknown (lib/STL)")) {
+            actual = actual->siguiente;
+            continue; // Saltar esta asignación y pasar a la siguiente
+        }
         resumen[actual->archivo].first++;
         resumen[actual->archivo].second += actual->tamano;
         actual = actual->siguiente;
@@ -280,6 +290,7 @@ void MainWindow::actualizarMemoryLeaks()
             QString archivo = QString::fromStdString(leak.archivo);
             conteoPorArchivo[archivo]++;
         }
+        //qDebug() << "Conteo de Leaks por Archivo:" << conteoPorArchivo;
 
         QString archivoMasLeaks;
         int maxLeaks = 0;
@@ -322,7 +333,17 @@ void MainWindow::actualizarGraficosLeaks(const QMap<QString, int>& conteoPorArch
         seriesPieLeaks->append(it.key(), it.value());
     }
     seriesBarrasLeaks->append(setBarras);
+    int maxLeaks = 0;
+    if (!conteoPorArchivo.isEmpty()) {
+        maxLeaks = *std::max_element(conteoPorArchivo.constBegin(), conteoPorArchivo.constEnd());
+    }
 
+
+    QValueAxis *axisY = qobject_cast<QValueAxis*>(chartBarrasLeaks->axes(Qt::Vertical).first());
+
+    if (axisY && maxLeaks > 0) {
+        axisY->setRange(0, maxLeaks * 1.1);
+    }
     QBarCategoryAxis *axisX = qobject_cast<QBarCategoryAxis*>(chartBarrasLeaks->axes(Qt::Horizontal).first());
     if (axisX) {
         axisX->setCategories(categorias);
