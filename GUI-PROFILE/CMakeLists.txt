@@ -9,9 +9,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Módulos Qt necesarios: Widgets y Network
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+# --- MENSAJE DE DEPURACIÓN 1 ---
+message(STATUS "DEBUG: Estoy a punto de buscar los paquetes de Qt...")
+
+# Módulos Qt necesarios: Widgets, Network y Charts
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Charts)
+
+# --- MENSAJE DE DEPURACIÓN 2 ---
+message(STATUS "DEBUG: Búsqueda de paquetes finalizada. Versión de Qt encontrada: ${QT_VERSION_MAJOR}")
 
 set(PROJECT_SOURCES
     # Forms
@@ -48,10 +54,10 @@ else()
     endif()
 endif()
 
-# Link libraries
-target_link_libraries(GUI-PROFILE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(GUI-PROFILE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Charts)
 
-# Configuración de bundle para macOS
+# ... (el resto del archivo no cambia) ...
+
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.GUI-PROFILE)
 endif()

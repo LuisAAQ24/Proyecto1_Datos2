@@ -20,6 +20,7 @@ protected:
 
 private slots:
     void clienteDesconectado();
+    void leerDatosCliente();
 
 private:
     QList<QTcpSocket*> clientes;

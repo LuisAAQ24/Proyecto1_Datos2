@@ -44,18 +44,21 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    // Crear GUI
     MainWindow window;
     window.show();
 
-    servidorSocket = new ServidorSocket(&window);
-    if(!servidorSocket->listen(QHostAddress::Any, 12345))
-        qDebug() << "Error iniciando servidor:" << servidorSocket->errorString();
-    else
-        qDebug() << "Servidor socket iniciado en puerto 12345";
 
-    // Ejecutar pruebas de memoria después de 1 segundo
-    QTimer::singleShot(1000, pruebasMemoria);
+    servidorSocket = new ServidorSocket(&window);
+
+    // 2. Poner el servidor a escuchar conexiones
+    if (!servidorSocket->listen(QHostAddress::Any, 12345)) {
+        qDebug() << "Error iniciando servidor:" << servidorSocket->errorString();
+    } else {
+        qDebug() << "Servidor socket iniciado en puerto 12345. Esperando conexiones...";
+    }
+
+    // 3. Ya NO se llaman las pruebas locales
+    // QTimer::singleShot(1000, pruebasMemoria);
 
     return app.exec();
 }

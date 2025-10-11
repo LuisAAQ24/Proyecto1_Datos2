@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 
-
+#include <QTcpSocket>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDateTime>
@@ -39,7 +39,7 @@ static std::string archivoLineaAstring(const char* file, int line) {
 
 
 static void enviarAlSocket(void* ptr, size_t tamano, const std::string& tipo, const std::string& archivo) {
-    if (servidorSocket) {
+    if (servidorSocket) { // <-- Usa la variable del SERVIDOR
         QJsonObject obj;
         obj["direccion"] = QString::number(reinterpret_cast<quintptr>(ptr), 16);
         obj["tamano"] = static_cast<int>(tamano);
@@ -47,9 +47,8 @@ static void enviarAlSocket(void* ptr, size_t tamano, const std::string& tipo, co
         obj["archivo"] = QString::fromStdString(archivo);
         obj["timestamp"] = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-
         QJsonDocument doc(obj);
-        servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
+        servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact)); // Envía a todos los clientes
     }
 }
 
@@ -270,6 +269,26 @@ void enviarReporteLeaks() {
 
     QJsonDocument doc(root);
     servidorSocket->enviarJSON(doc.toJson(QJsonDocument::Compact));
+}
+void* operator new(std::size_t tamano) {
+    // Llama a nuestra versión de rastreo con información de archivo desconocida
+    return operator new(tamano, "Unknown (lib/STL)", 0);
+}
+
+// new[] estándar
+void* operator new[](std::size_t tamano) {
+    // Llama a nuestra versión de rastreo con información de archivo desconocida
+    return operator new[](tamano, "Unknown (lib/STL)", 0);
+}
+
+// delete estándar
+void operator delete(void* direccion) noexcept {
+    if (profilerActivo && direccion) {
+        std::cout << "[DELETE] ptr=" << direccion << "\n";
+        listaGlobal.eliminar(direccion);
+        enviarAlSocket(direccion, 0, "delete", "");
+    }
+    std::free(direccion);
 }
 
 /*Reporte de leaks:
