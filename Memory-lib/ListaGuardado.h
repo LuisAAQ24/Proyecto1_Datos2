@@ -1,0 +1,59 @@
+#ifndef LISTA_GUARDADO_H
+#define LISTA_GUARDADO_H
+
+
+#include <ctime>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <QJsonObject>
+
+
+struct Guardado {
+    void* direccion;
+    size_t tamano;
+    std::string tipo;
+    std::string archivo;
+    time_t marcaDeTiempo;
+    Guardado* siguiente;
+};
+
+
+struct Fuga {
+    void* direccion;
+    size_t tamano;
+    std::string tipo;
+    std::string archivo;
+    time_t marcaDeTiempo;
+};
+
+
+class ListaGuardado {
+private:
+    Guardado* inicio = nullptr;
+    size_t totalAsignaciones = 0;
+    size_t totalLiberaciones = 0;
+    size_t memoriaActual = 0;
+    size_t maxMemoriaUsada = 0;
+public:
+    void agregar(void* direccion, size_t tamano, const std::string& tipo, const std::string& archivo);
+    void eliminar(void* direccion);
+    void limpiar();
+    std::vector<Fuga> reportLeaks();
+    void exportJSON(const std::vector<Fuga>& fugas, const std::string& filename = "memory_report.json");
+    QJsonObject obtenerMetricas();
+    Guardado* getInicio() { return inicio; }
+    size_t getTotalAsignaciones() const { return totalAsignaciones; }
+};
+
+
+extern ListaGuardado listaGlobal;
+#endif
+
+
+
+
+
+
+

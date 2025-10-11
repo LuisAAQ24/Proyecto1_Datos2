@@ -1,0 +1,3 @@
+C:/Users/luisa/Documents/GitHub/programa1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/ProgramaDePrueba.dir
+C:/Users/luisa/Documents/GitHub/programa1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/luisa/Documents/GitHub/programa1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir

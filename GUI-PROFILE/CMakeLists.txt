@@ -26,13 +26,11 @@ set(PROJECT_SOURCES
     # Header Files
         ListaGuardado.h
         mainwindow.h
-        memory_instrumentation.h
         ServidorSocket.h
 
     # Source Files
         main.cpp
         mainwindow.cpp
-        memory_instrumentation.cpp
         ListaGuardado.cpp
         ServidorSocket.cpp
 )

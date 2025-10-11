@@ -1,0 +1,8 @@
+# ninja log v6
+4	390	7818556806485600	build.ninja	69e2f2c090148b5f
+7	2036	7818483826649582	CMakeFiles/ClienteDePrueba.dir/ListaGuardado.cpp.obj	6b9c56205694ab79
+8	1835	7818473380386033	CMakeFiles/ClienteDePrueba.dir/main.cpp.obj	91477ea4cef189c1
+2302	2437	7818484162645544	ClienteDePrueba.exe	fa783b5b905e07b1
+26	2296	7818484139887826	CMakeFiles/ClienteDePrueba.dir/memory_instrumentation.cpp.obj	fc1c94d78893f7d0
+20	1942	7818556928653432	CMakeFiles/ProgramaDePrueba.dir/main.cpp.obj	d921be34c450e588
+23	155	7818557974564208	ProgramaDePrueba.exe	756dd728aa58cb95

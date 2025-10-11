@@ -10,10 +10,17 @@
 #include <QTimer>
 #include <QTableWidget>
 #include <QLabel>
+#include "ListaGuardado.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+class ServidorSocket;
+
+
+extern ListaGuardado listaGlobal;
+extern ServidorSocket* servidorSocket;
 
 class MainWindow : public QMainWindow
 {
@@ -29,7 +36,7 @@ public slots:
     void actualizarMapaMemoria();
     void actualizarAsignacionPorArchivo();
     void actualizarMemoryLeaks();
-    void procesarDatosSocket(const QJsonObject& datos);
+    //void procesarDatosSocket(const QJsonObject& datos);
 
 private slots:
     void onTimerTimeout();

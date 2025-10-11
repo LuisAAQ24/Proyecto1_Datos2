@@ -13,6 +13,10 @@
 #include <QColor>
 #include <map> // Necesario para agrupar datos
 
+class ServidorSocket;
+extern ListaGuardado listaGlobal;
+extern ServidorSocket* servidorSocket;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -49,7 +53,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupVistaGeneral()
 {
-    // ... (sin cambios en esta función)
+
     // Configurar gráfico de línea de tiempo
     chartLineaTiempo = new QChart();
     seriesMemoria = new QLineSeries();
@@ -75,7 +79,6 @@ void MainWindow::setupVistaGeneral()
 
 void MainWindow::setupMapaMemoria()
 {
-    // ... (sin cambios en esta función)
     // Configurar tabla del mapa de memoria
     QStringList headers;
     headers << "Dirección" << "Tamaño (bytes)" << "Tipo" << "Archivo" << "Timestamp";
@@ -87,7 +90,6 @@ void MainWindow::setupMapaMemoria()
 
 void MainWindow::setupAsignacionArchivo()
 {
-    // ... (sin cambios en esta función)
     // Configurar tabla de asignación por archivo
     QStringList headers;
     headers << "Archivo" << "Conteo Asignaciones" << "Memoria Total (MB)";
@@ -98,7 +100,6 @@ void MainWindow::setupAsignacionArchivo()
 
 void MainWindow::setupMemoryLeaks()
 {
-    // ... (sin cambios en esta función)
     // Configurar gráfico de barras para leaks por archivo
     chartBarrasLeaks = new QChart();
     seriesBarrasLeaks = new QBarSeries();
@@ -148,7 +149,6 @@ void MainWindow::actualizarMetricasGenerales()
 
 void MainWindow::actualizarPanelMetricas()
 {
-    // Esta función ya está correctamente implementada.
     QJsonObject metricas = listaGlobal.obtenerMetricas();
     memoriaActual = metricas["memoriaActual"].toInt();
     maxMemoriaUsada = metricas["maxMemoriaUsada"].toInt();
@@ -164,7 +164,6 @@ void MainWindow::actualizarPanelMetricas()
 
 void MainWindow::actualizarLineaTiempo()
 {
-    // Esta función debería funcionar correctamente ahora que `memoriaActual` se actualiza.
     qint64 tiempoActual = QDateTime::currentMSecsSinceEpoch() - tiempoInicio;
     qint64 segundos = tiempoActual / 1000;
 
@@ -178,7 +177,6 @@ void MainWindow::actualizarLineaTiempo()
     chartLineaTiempo->axes(Qt::Vertical).first()->setRange(0, qMax(0.1, (maxMemoriaUsada / 1024.0 / 1024.0) * 1.1));
 }
 
-// CAMBIO: Esta función ahora lee directamente de listaGlobal
 void MainWindow::actualizarResumenTopArchivos()
 {
     QLayoutItem* child;
@@ -238,7 +236,6 @@ void MainWindow::actualizarMapaMemoria()
     }
 }
 
-// CAMBIO: Esta función ahora lee directamente de listaGlobal
 void MainWindow::actualizarAsignacionPorArchivo()
 {
     // Agrupar datos directamente desde listaGlobal
@@ -261,7 +258,7 @@ void MainWindow::actualizarAsignacionPorArchivo()
     }
 }
 
-// CAMBIO: Esta función ahora lee los leaks directamente de listaGlobal
+
 void MainWindow::actualizarMemoryLeaks()
 {
     auto fugas = listaGlobal.reportLeaks();
@@ -311,7 +308,7 @@ void MainWindow::actualizarMemoryLeaks()
     }
 }
 
-// CAMBIO: He movido la declaración de esta función a mainwindow.h
+
 void MainWindow::actualizarGraficosLeaks(const QMap<QString, int>& conteoPorArchivo)
 {
     seriesBarrasLeaks->clear();
@@ -332,11 +329,7 @@ void MainWindow::actualizarGraficosLeaks(const QMap<QString, int>& conteoPorArch
     }
 }
 
-// Esta función ya no es necesaria, pero la dejamos por si se usa en el futuro.
-void MainWindow::procesarDatosSocket(const QJsonObject& datos)
-{
-    // ... (código sin usar por ahora)
-}
+
 
 
 
